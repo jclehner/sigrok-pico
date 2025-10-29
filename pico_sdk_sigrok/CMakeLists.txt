@@ -25,6 +25,8 @@ set(CMAKE_CXX_STANDARD 17)
 #setting this allows the DTR to be ignored.  In addition to this, the use of 
 #tud_cdc_connected should be replaced with tud_ready.
 add_definitions(-DPICO_STDIO_USB_CONNECTION_WITHOUT_DTR=1)
+#add_definitions(-DPICO_USE_FASTEST_SUPPORTED_CLOCK=1)
+add_definitions(-DSYS_CLK_MHZ=200)
 pico_sdk_init()
 
 add_executable(pico_sdk_sigrok
