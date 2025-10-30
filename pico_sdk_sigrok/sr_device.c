@@ -148,8 +148,9 @@ int process_char(sr_device_t *d, char charin)
          break;
       case 'R':
          tmpint = atol(&(d->cmdstr[1]));
-         if ((tmpint >= 5000) && (tmpint <= (SYS_CLK_MHZ*1000000)+16))
-         { // Add 16 to support cfg_bits
+		 // round down max sample rate to nearest multiple of 20 MHz
+		 // add 16 to support cfg_bit
+         if ((tmpint >= 5000) && (tmpint <= ((SYS_CLK_MHZ/20)*20000000)+16)) {
             d->sample_rate = tmpint;
             // Dprintf("SMPRATE= %u\n\r",d->sample_rate);
             ret = 1;
