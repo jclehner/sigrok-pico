@@ -21,13 +21,30 @@ include(pico_sdk_import.cmake)
 project(pico_sdk_sigrok C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
+
+# 0 = baseline, 1 = digital 26, 2 = digital 32
+set(PICO_MODE 0)
+
 #See https://github.com/pico-coder/sigrok-pico/pull/63/  
 #setting this allows the DTR to be ignored.  In addition to this, the use of 
 #tud_cdc_connected should be replaced with tud_ready.
 add_definitions(-DPICO_STDIO_USB_CONNECTION_WITHOUT_DTR=1)
 #add_definitions(-DPICO_USE_FASTEST_SUPPORTED_CLOCK=1)
 add_definitions(-DSYS_CLK_MHZ=200)
+add_definitions(-DPICO_MODE=${PICO_MODE})
 pico_sdk_init()
+
+set(EXE_NAME "pico_sdk_sigrok")
+
+if(PICO_MODE EQUAL 0)
+	list(APPEND EXE_NAME "_baseline")
+elseif(PICO_MODE EQUAL 1)
+	list(APPEND EXE_NAME "_dig26")
+elseif(PICO_MODE EQUAL 2)
+	list(APPEND EXE_NAME "_dig32")
+else()
+	message(FATAL_ERROR "invalid PICO_MODE value")
+endif()
 
 add_executable(pico_sdk_sigrok
   pico_sdk_sigrok.c
